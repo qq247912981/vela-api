@@ -19,10 +19,11 @@ type ArchStepKey = 'premise' | 'characters' | 'worldbuilding' | 'synopsis'
 
 /** 从文件路径推断出 ArchStepKey */
 function detectStepKey(filePath: string): ArchStepKey | null {
-  if (filePath.endsWith('premise.md')) return 'premise'
-  if (filePath.endsWith('characters.md')) return 'characters'
-  if (filePath.endsWith('worldbuilding.md')) return 'worldbuilding'
-  if (filePath.endsWith('synopsis.md')) return 'synopsis'
+  // 同时兼容 vela://core/premise 伪协议路径与 premise.md 物理文件名
+  if (/(^|\/)premise(\.md)?$/.test(filePath)) return 'premise'
+  if (/(^|\/)characters(\.md)?$/.test(filePath)) return 'characters'
+  if (/(^|\/)worldbuilding(\.md)?$/.test(filePath)) return 'worldbuilding'
+  if (/(^|\/)synopsis(\.md)?$/.test(filePath)) return 'synopsis'
   return null
 }
 
