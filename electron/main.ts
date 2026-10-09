@@ -1,6 +1,9 @@
 import { app, BrowserWindow } from 'electron'
 import { registerIPCHandlers } from './ipc-handlers'
 import { registerMCPHandlers } from './mcp/mcp-ipc-bridge'
+import { installMainProcessShim } from './api/shim'
+import { registerApiRoutes } from './api/routes'
+import { startLocalApiServer } from './api/http-server'
 
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -71,6 +74,13 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(() => {
+  // 主进程垫片必须最先安装：让一致性模块（内部走 IPC 通道）在主进程可复用
+  installMainProcessShim()
+  registerApiRoutes()
+  startLocalApiServer().catch((err) => {
+    console.error('[Vela API] 本地接口启动失败:', err)
+  })
+
   registerIPCHandlers()
   registerMCPHandlers()
   createWindow()

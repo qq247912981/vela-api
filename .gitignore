@@ -4,6 +4,7 @@ node_modules
 # 构建输出
 dist
 dist-electron
+dist-api
 release
 
 # 日志
