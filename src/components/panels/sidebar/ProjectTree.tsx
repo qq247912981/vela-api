@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 
 
 import {
-  ARCH_FILES, LeafItem, renderIcon, showSidebarMenu,
+  getArchFiles, LeafItem, renderIcon, showSidebarMenu,
   openArchFile, openBuiltinEditor,
 } from './SidebarShared'
 import DraftBoxGroup from './DraftBoxGroup'
@@ -135,7 +135,7 @@ export default function ProjectTree() {
   const configDone = !!(nc.coreOutline?.trim() || nc.protagonistProfile?.trim())
 
   // 故事架构进度
-  const archDone = ARCH_FILES.filter(f => archStatus[f.key]).length
+  const archDone = getArchFiles().filter(f => archStatus[f.key]).length
 
   return (
     <div className="text-sm">
@@ -232,6 +232,7 @@ function WorldBuildingGroup({
   const { t } = useTranslation('panels')
   const [open, setOpen] = useState(true)
 
+  const ARCH_FILES = getArchFiles()
   const allDone = archDone === ARCH_FILES.length
 
   return (
